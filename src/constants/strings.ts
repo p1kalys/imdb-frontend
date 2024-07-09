@@ -7,8 +7,6 @@ export const ADD_MOVIES_ENDPOINT = "/api/add-movies"
 export const EDIT_MOVIES_ENDPOINT = "/api/movie/edit"
 export const PROFILE_ENDPOINT = "/api/profile"
 
-// Api end points
-
 export const ALL_ACTORS_ENDPOINT = "/api/actor/all"
 export const INSERT_ACTOR_ENDPOINT = "/api/actor/insert"
 

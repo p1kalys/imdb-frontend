@@ -1,7 +1,6 @@
 import Card from "@mui/material/Card"
 import CardHeader from "@mui/material/CardHeader"
 import Avatar from "@mui/material/Avatar"
-import { red } from "@mui/material/colors"
 import { Box, Container } from "@mui/material"
 import useLogin from "../hooks/useLogin"
 
@@ -18,10 +17,10 @@ export default function Profile() {
           minHeight: "100vh",
         }}
       >
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ width: 300 }}>
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+              <Avatar sx={{ bgcolor: '#f3ae00' }} aria-label="recipe">
                 {user?.name[0]}
               </Avatar>
             }
