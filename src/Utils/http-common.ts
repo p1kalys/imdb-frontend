@@ -7,7 +7,7 @@ import {
 } from "./popupMessage"
 
 const instance = axios.create({
-  baseURL: "http://127.0.0.1:8081/",
+  baseURL: "https://imdb-backend-iqj9.onrender.com",
   headers: {
     "Content-type": "application/json",
   },
