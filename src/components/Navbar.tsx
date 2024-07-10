@@ -1,11 +1,9 @@
-import Toolbar from "@mui/material/Toolbar"
-import AppBar from "@mui/material/AppBar"
-import Box from "@mui/material/Box"
-import { ThemeProvider } from "@mui/material/styles"
+import { useState } from "react"
+import { AppBar, Box, Button, Drawer, Toolbar } from "@mui/material"
+import { ThemeProvider, useTheme } from "@mui/material/styles"
+import { Link } from "react-router-dom"
 import logo from "../images/logo.png"
 import { appTheme } from "../constants/theme.constant"
-import { Button } from "@mui/material"
-import { Link } from "react-router-dom"
 import {
   ADD_MOVIES_ENDPOINT,
   HOME_ENDPOINT,
@@ -16,10 +14,93 @@ import {
 import { useAuthPage } from "../hooks/useAuthPage"
 import LinearProgressIndicator from "./LinearProgressIndicator"
 import useLogin from "../hooks/useLogin"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
 export function NavBar() {
   const { isUserLoggedIn, logout } = useLogin()
   const isAuthPage = useAuthPage()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const [drawerOpen, setDrawerOpen] = useState(false)
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen)
+  }
+
+  const renderButtons = () => (
+    <>
+      {!isAuthPage && !isUserLoggedIn() && (
+        <>
+          <Link to={SIGNUP_ENDPOINT}>
+            <Button
+              variant="text"
+              style={{
+                marginRight: "20px",
+                color: "black",
+                fontWeight: "bold",
+              }}
+            >
+              SIGNUP
+            </Button>
+          </Link>
+          <Link to={LOGIN_ENDPOINT}>
+            <Button variant="contained" sx={{ borderRadius: 2 }}>
+              LOGIN
+            </Button>
+          </Link>
+        </>
+      )}
+      {!isAuthPage && isUserLoggedIn() && (
+        <>
+          <Link to={HOME_ENDPOINT}>
+            <Button
+              variant="text"
+              style={{
+                marginRight: "20px",
+                color: "black",
+                fontWeight: "bold",
+              }}
+            >
+              SAVED MOVIES
+            </Button>
+          </Link>
+          <Link to={ADD_MOVIES_ENDPOINT}>
+            <Button
+              variant="text"
+              style={{
+                marginRight: "20px",
+                color: "black",
+                fontWeight: "bold",
+              }}
+            >
+              ADD MOVIES
+            </Button>
+          </Link>
+          <Link to={PROFILE_ENDPOINT}>
+            <Button
+              variant="text"
+              style={{
+                marginRight: "20px",
+                color: "black",
+                fontWeight: "bold",
+              }}
+            >
+              PROFILE
+            </Button>
+          </Link>
+          <Link to={LOGIN_ENDPOINT} replace>
+            <Button
+              onClick={logout}
+              variant="contained"
+              sx={{ borderRadius: 2 }}
+            >
+              LOGOUT
+            </Button>
+          </Link>
+        </>
+      )}
+    </>
+  )
 
   return (
     <ThemeProvider theme={appTheme}>
@@ -30,90 +111,40 @@ export function NavBar() {
         }}
       >
         <LinearProgressIndicator />
-        <Toolbar variant="dense" style={{ padding: "10px 60px" }}>
+        <Toolbar variant="dense" style={{ padding: "20px", justifyContent: 'space-between' }}>
           <img
             src={logo}
             alt="App Icon"
             style={{
               width: "90px",
-              height: "44px",
+              height: "40px",
               marginRight: "10px",
             }}
           />
-          <Box
-            sx={{
-              flexGrow: 1,
-            }}
-          />
-          {!isAuthPage && !isUserLoggedIn() && (
+          <Box sx={{ flexGrow: 1 }} />
+          {isMobile ? (
             <>
-              <Link to={SIGNUP_ENDPOINT}>
-                <Button
-                  variant="text"
-                  style={{
-                    marginRight: "20px",
-                    color: "black",
-                    fontWeight: "bold",
+              <Button onClick={handleDrawerToggle}>Menu</Button>
+              <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={handleDrawerToggle}
+              >
+                <Box
+                  sx={{
+                    width: 250,
+                    padding: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
                   }}
                 >
-                  SIGNUP
-                </Button>
-              </Link>
-              <Link to={LOGIN_ENDPOINT}>
-                <Button variant="contained" sx={{ borderRadius: 2 }}>
-                  LOGIN
-                </Button>
-              </Link>
+                  {renderButtons()}
+                </Box>
+              </Drawer>
             </>
-          )}
-          {!isAuthPage && isUserLoggedIn() && (
-            <>
-              <Link to={HOME_ENDPOINT}>
-                <Button
-                  variant="text"
-                  style={{
-                    marginRight: "20px",
-                    color: "black",
-                    fontWeight: "bold",
-                  }}
-                >
-                  SAVED MOVIES
-                </Button>
-              </Link>
-              <Link to={ADD_MOVIES_ENDPOINT}>
-                <Button
-                  variant="text"
-                  style={{
-                    marginRight: "20px",
-                    color: "black",
-                    fontWeight: "bold",
-                  }}
-                >
-                  ADD MOVIES
-                </Button>
-              </Link>
-              <Link to={PROFILE_ENDPOINT}>
-                <Button
-                  variant="text"
-                  style={{
-                    marginRight: "20px",
-                    color: "black",
-                    fontWeight: "bold",
-                  }}
-                >
-                  PROFILE
-                </Button>
-              </Link>
-              <Link to={LOGIN_ENDPOINT} replace>
-                <Button
-                  onClick={logout}
-                  variant="contained"
-                  sx={{ borderRadius: 2 }}
-                >
-                  LOGOUT
-                </Button>
-              </Link>
-            </>
+          ) : (
+            renderButtons()
           )}
         </Toolbar>
       </AppBar>
